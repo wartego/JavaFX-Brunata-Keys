@@ -4,6 +4,8 @@ module pl.wartego.javafxtest {
 
     requires org.controlsfx.controls;
     requires org.kordamp.ikonli.javafx;
+    requires java.sql;
+    requires mysql.connector.j;
 
     opens pl.wartego.javafxtest to javafx.fxml;
     exports pl.wartego.javafxtest;
