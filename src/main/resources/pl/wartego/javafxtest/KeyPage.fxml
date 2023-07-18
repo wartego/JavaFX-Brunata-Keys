@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.gluonhq.charm.glisten.control.TextField?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.Glow?>
@@ -13,15 +15,26 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.wartego.javafxtest.KeyPageController">
    <right>
-      <AnchorPane prefHeight="650.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="550.0" prefWidth="591.0" BorderPane.alignment="CENTER">
          <children>
-
+            <Button fx:id="buttonClose" layoutX="369.0" layoutY="497.0" mnemonicParsing="false" onAction="#buttonCloseAction" prefHeight="38.0" prefWidth="151.0" text="Close">
+               <effect>
+                  <Glow>
+                     <input>
+                        <DropShadow />
+                     </input>
+                  </Glow>
+               </effect>
+            </Button>
+            <Label layoutX="31.0" layoutY="42.0" prefHeight="29.0" prefWidth="112.0" text="Key before: " />
+            <Label layoutX="31.0" layoutY="102.0" prefHeight="29.0" prefWidth="112.0" text="Key after: " />
+            <TextField layoutX="156.0" layoutY="44.0" />
          </children></AnchorPane>
    </right>
    <left>
-      <AnchorPane prefHeight="553.0" prefWidth="331.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="550.0" prefWidth="160.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="112.0" layoutY="83.0" text="Brunata" textFill="WHITE" textOverrun="LEADING_ELLIPSIS">
+            <Label layoutX="25.0" layoutY="69.0" text="Brunata" textFill="WHITE" textOverrun="LEADING_ELLIPSIS">
                <font>
                   <Font name="Verdana Bold" size="24.0" />
                </font>
@@ -29,7 +42,7 @@
                   <DropShadow />
                </effect>
             </Label>
-            <Circle layoutX="166.0" layoutY="226.0" opacity="0.4" radius="100.0" strokeLineCap="BUTT" strokeLineJoin="BEVEL" strokeType="INSIDE" strokeWidth="0.2">
+            <Circle layoutX="79.0" layoutY="175.0" opacity="0.4" radius="55.0" strokeLineCap="BUTT" strokeLineJoin="BEVEL" strokeType="INSIDE" strokeWidth="0.2">
                <fill>
                   <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
                      <stops>
@@ -47,9 +60,9 @@
                   </RadialGradient>
                </fill>
             </Circle>
-            <Label layoutX="95.0" layoutY="499.0" text="Copyright (c). All Rights Reserved." textFill="WHITE">
+            <Label layoutX="7.0" layoutY="498.0" text="Copyright (c). All Rights Reserved." textFill="WHITE">
                <font>
-                  <Font name="Segoe UI Light" size="12.0" />
+                  <Font name="Segoe UI Light" size="10.0" />
                </font>
                <effect>
                   <Glow />
