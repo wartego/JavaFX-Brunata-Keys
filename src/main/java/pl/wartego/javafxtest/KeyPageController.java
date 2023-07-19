@@ -21,27 +21,26 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
-public class KeyPageController implements Initializable{
+public class KeyPageController implements Initializable {
+    public static Connection connectDB;
     @FXML
     private Button buttonClose;
-
     @FXML
     private TextField textKeyBefore;
-
     @FXML
     private TextField textKeyAfter;
-
     @FXML
     private TableView tableDB;
 
-    private ObservableList<ObservableList> data;
+    @FXML
+    private TextField fieldCount;
 
-    public static Connection connectDB ;
+    private ObservableList<ObservableList> data;
     private ResultSet queryResult;
 
 
     @FXML
-    protected void buttonCloseAction() throws IOException {
+    protected void buttonCloseAction() {
         Stage stage = (Stage) buttonClose.getScene().getWindow();
         stage.close();
     }
@@ -65,10 +64,10 @@ public class KeyPageController implements Initializable{
         try {
             PreparedStatement preparedStatement = connectDB.prepareStatement(addRowToTable);
 
-            preparedStatement.setString(1,textKeyBefore.getText());
-            preparedStatement.setString(2,textKeyAfter.getText());
-            preparedStatement.setString(3,"user");
-            preparedStatement.setString(4,formatedDate);
+            preparedStatement.setString(1, textKeyBefore.getText());
+            preparedStatement.setString(2, textKeyAfter.getText());
+            preparedStatement.setString(3, "user");
+            preparedStatement.setString(4, formatedDate);
             int queryResult = preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -83,7 +82,7 @@ public class KeyPageController implements Initializable{
     @FXML
     protected void listAllRowsFromDB() throws SQLException, IOException {
 
-            connectDB = ConnectionDBMethods.getDataBaseConnect();
+        connectDB = ConnectionDBMethods.getDataBaseConnect();
 
 
         data = FXCollections.observableArrayList();
@@ -96,23 +95,22 @@ public class KeyPageController implements Initializable{
             addColumns();
             while (queryResult.next()) {
                 ObservableList<String> row = FXCollections.observableArrayList();
-                for(int i=1 ; i<=queryResult.getMetaData().getColumnCount(); i++){
+                for (int i = 1; i <= queryResult.getMetaData().getColumnCount(); i++) {
                     //Iterate Column
                     row.add(queryResult.getString(i));
                 }
-                System.out.println("Row [1] added "+row );
+                System.out.println("Row [1] added " + row);
                 data.add(row);
-                }
-            tableDB.setItems(data);
             }
-         catch (Exception e) {
+            tableDB.setItems(data);
+        } catch (Exception e) {
             e.printStackTrace();
-        System.out.println("Error on Building Data");
-    }
+            System.out.println("Error on Building Data");
+        }
     }
 
     @FXML
-    protected void updateTableRows() throws SQLException, IOException {
+    protected void updateTableRows() {
 
         connectDB = ConnectionDBMethods.getDataBaseConnect();
 
@@ -126,25 +124,25 @@ public class KeyPageController implements Initializable{
 
             while (queryResult.next()) {
                 ObservableList<String> row = FXCollections.observableArrayList();
-                for(int i=1 ; i<=queryResult.getMetaData().getColumnCount(); i++){
+                for (int i = 1; i <= queryResult.getMetaData().getColumnCount(); i++) {
                     //Iterate Column
                     row.add(queryResult.getString(i));
                 }
-                System.out.println("Row [1] added "+row );
+                System.out.println("Row [1] added " + row);
                 data.add(row);
             }
             tableDB.setItems(data);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error on Building Data");
         }
     }
+
     protected void addColumns() throws SQLException {
-        for(int i =0; i < queryResult.getMetaData().getColumnCount();i++){
+        for (int i = 0; i < queryResult.getMetaData().getColumnCount(); i++) {
             final int j = i;
-            TableColumn col = new TableColumn(queryResult.getMetaData().getColumnName(i+1));
-            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList,String>, ObservableValue<String>>() {
+            TableColumn col = new TableColumn(queryResult.getMetaData().getColumnName(i + 1));
+            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
                 @Override
                 public ObservableValue call(TableColumn.CellDataFeatures<ObservableList, String> param) {
                     return new SimpleStringProperty(param.getValue().get(j).toString());
@@ -152,14 +150,21 @@ public class KeyPageController implements Initializable{
             });
 
             tableDB.getColumns().addAll(col);
-            System.out.println("Column ["+i+"] ");
+            System.out.println("Column [" + i + "] ");
 
         }
     }
+    @FXML
+    protected void countAllRows() throws SQLException {
+        ConnectionDBMethods.getCountRows();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             listAllRowsFromDB();
+            int countRows = ConnectionDBMethods.getCountRows();
+            fieldCount.setText("Count: "+ countRows);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

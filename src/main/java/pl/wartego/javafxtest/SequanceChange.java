@@ -1,18 +1,8 @@
 package pl.wartego.javafxtest;
 
-import javafx.fxml.FXML;
-
 public class SequanceChange {
     private String stringKeyAfter;
     private String stringKeyBefore;
-
-    public String getStringKeyBefore() {
-        return stringKeyBefore;
-    }
-
-    public String getStringKeyAfter() {
-        return stringKeyAfter;
-    }
 
 
     public String changeSequence(String stringKeyBefore){
