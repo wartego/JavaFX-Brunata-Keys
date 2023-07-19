@@ -1,24 +1,45 @@
 package pl.wartego.javafxtest;
 
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
+import java.net.URL;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ResourceBundle;
 
-public class KeyPageController {
+public class KeyPageController implements Initializable{
     @FXML
     private Button buttonClose;
-
-    @FXML
-    private Button generateButton;
 
     @FXML
     private TextField textKeyBefore;
 
     @FXML
     private TextField textKeyAfter;
+
+    @FXML
+    private TableView tableDB;
+
+    private ObservableList<ObservableList> data;
+
+    public static Connection connectDB ;
+    private ResultSet queryResult;
+
+
     @FXML
     protected void buttonCloseAction() throws IOException {
         Stage stage = (Stage) buttonClose.getScene().getWindow();
@@ -26,10 +47,123 @@ public class KeyPageController {
     }
 
     @FXML
-    protected void buttonGenerateAction() {
+    protected void buttonGenerateAction() throws SQLException, IOException {
         SequanceChange sequanceChange = new SequanceChange();
         String keyAfterChanges = sequanceChange.changeSequence(textKeyBefore.getText());
-
         textKeyAfter.setText(keyAfterChanges);
+        addToTableKeys();
+    }
+
+    @FXML
+    protected void addToTableKeys() throws IOException, SQLException {
+        connectDB = ConnectionDBMethods.getDataBaseConnect();
+        LocalDate date = LocalDate.now();
+        String formatedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        String addRowToTable = "INSERT INTO encryptionkeys (keybefore, keyafter, userProvide, inputDate) VALUES (?, ?,?,?);";
+
+        try {
+            PreparedStatement preparedStatement = connectDB.prepareStatement(addRowToTable);
+
+            preparedStatement.setString(1,textKeyBefore.getText());
+            preparedStatement.setString(2,textKeyAfter.getText());
+            preparedStatement.setString(3,"user");
+            preparedStatement.setString(4,formatedDate);
+            int queryResult = preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            connectDB.close();
+        }
+
+        updateTableRows();
+    }
+
+    @FXML
+    protected void listAllRowsFromDB() throws SQLException, IOException {
+
+            connectDB = ConnectionDBMethods.getDataBaseConnect();
+
+
+        data = FXCollections.observableArrayList();
+        String listAllQuery = "SELECT * FROM encryptionkeys";
+
+        try {
+            Statement statement = connectDB.createStatement();
+            queryResult = statement.executeQuery(listAllQuery);
+
+            addColumns();
+            while (queryResult.next()) {
+                ObservableList<String> row = FXCollections.observableArrayList();
+                for(int i=1 ; i<=queryResult.getMetaData().getColumnCount(); i++){
+                    //Iterate Column
+                    row.add(queryResult.getString(i));
+                }
+                System.out.println("Row [1] added "+row );
+                data.add(row);
+                }
+            tableDB.setItems(data);
+            }
+         catch (Exception e) {
+            e.printStackTrace();
+        System.out.println("Error on Building Data");
+    }
+    }
+
+    @FXML
+    protected void updateTableRows() throws SQLException, IOException {
+
+        connectDB = ConnectionDBMethods.getDataBaseConnect();
+
+
+        data = FXCollections.observableArrayList();
+        String listAllQuery = "SELECT * FROM encryptionkeys";
+
+        try {
+            Statement statement = connectDB.createStatement();
+            queryResult = statement.executeQuery(listAllQuery);
+
+            while (queryResult.next()) {
+                ObservableList<String> row = FXCollections.observableArrayList();
+                for(int i=1 ; i<=queryResult.getMetaData().getColumnCount(); i++){
+                    //Iterate Column
+                    row.add(queryResult.getString(i));
+                }
+                System.out.println("Row [1] added "+row );
+                data.add(row);
+            }
+            tableDB.setItems(data);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error on Building Data");
+        }
+    }
+    protected void addColumns() throws SQLException {
+        for(int i =0; i < queryResult.getMetaData().getColumnCount();i++){
+            final int j = i;
+            TableColumn col = new TableColumn(queryResult.getMetaData().getColumnName(i+1));
+            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList,String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                    return new SimpleStringProperty(param.getValue().get(j).toString());
+                }
+            });
+
+            tableDB.getColumns().addAll(col);
+            System.out.println("Column ["+i+"] ");
+
+        }
+    }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            listAllRowsFromDB();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.wartego.javafxtest.KeyPageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.wartego.javafxtest.KeyPageController">
    <right>
-      <AnchorPane prefHeight="550.0" prefWidth="591.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="550.0" prefWidth="893.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="buttonClose" layoutX="418.0" layoutY="497.0" mnemonicParsing="false" onAction="#buttonCloseAction" prefHeight="38.0" prefWidth="151.0" text="Close">
+            <Button fx:id="buttonClose" layoutX="656.0" layoutY="471.0" mnemonicParsing="false" onAction="#buttonCloseAction" prefHeight="38.0" prefWidth="151.0" text="Close">
                <effect>
                   <Glow>
                      <input>
@@ -22,9 +29,16 @@
             </Button>
             <Label layoutX="31.0" layoutY="42.0" prefHeight="29.0" prefWidth="112.0" text="Key before: " />
             <Label layoutX="31.0" layoutY="102.0" prefHeight="29.0" prefWidth="112.0" text="Key after: " />
-            <Button fx:id="generateButton" layoutX="68.0" layoutY="464.0" mnemonicParsing="false" onAction="#buttonGenerateAction" prefHeight="52.0" prefWidth="151.0" text="Generate" />
-            <TextField fx:id="textKeyAfter" layoutX="159.0" layoutY="44.0" prefHeight="26.0" prefWidth="376.0" promptText="Key before" />
-            <TextField fx:id="textKeyBefore" layoutX="159.0" layoutY="106.0" prefHeight="26.0" prefWidth="378.0" promptText="Key After" />
+            <Button fx:id="generateButton" layoutX="101.0" layoutY="457.0" mnemonicParsing="false" onAction="#buttonGenerateAction" prefHeight="52.0" prefWidth="151.0" text="Generate" />
+            <TextField fx:id="textKeyBefore" layoutX="159.0" layoutY="44.0" prefHeight="26.0" prefWidth="376.0" promptText="Key before" text="WwkIyJKlriIvns1LCQgObiEporwAtv7I" />
+            <TextField fx:id="textKeyAfter" layoutX="159.0" layoutY="106.0" prefHeight="26.0" prefWidth="378.0" promptText="Key After" />
+            <TableView fx:id="tableDB" cache="true" cacheHint="SCALE_AND_ROTATE" editable="true" layoutX="125.0" layoutY="192.0" prefHeight="207.0" prefWidth="644.0" tableMenuButtonVisible="true">
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <effect>
+                  <Glow />
+               </effect></TableView>
          </children></AnchorPane>
    </right>
    <left>

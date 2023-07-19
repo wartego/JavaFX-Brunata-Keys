@@ -11,14 +11,16 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.Window;
+
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
-public class HelloController {
+
+public class HelloController{
     @FXML
     private Button cancelButton;
     @FXML
@@ -30,6 +32,8 @@ public class HelloController {
     @FXML
     private PasswordField passwordTextField;
 
+    @FXML
+    public static Connection connectDB;
 
     @FXML
     protected void setCancelButtonOnClick(ActionEvent e) {
@@ -38,7 +42,7 @@ public class HelloController {
     }
 
     @FXML
-    protected void loginButtonOnClick(ActionEvent e) throws IOException {
+    protected void loginButtonOnClick(ActionEvent e) throws IOException, SQLException {
 
         if (!usernameTextField.getText().isBlank() && !passwordTextField.getText().isBlank()) {
             loginMessageLabel.setText("You try to login");
@@ -55,9 +59,8 @@ public class HelloController {
     }
 
     @FXML
-    protected void validateLogin() throws IOException {
-        DatabaseConnection connectNow = new DatabaseConnection();
-        Connection connectDB = connectNow.getConnection();
+    protected void validateLogin() throws IOException, SQLException {
+        connectDB = ConnectionDBMethods.getDataBaseConnect();
         String verifyLogin = String.format("SELECT count(1) FROM User where login = '%s' AND password = '%s'", usernameTextField.getText(), passwordTextField.getText());
 
         try {
@@ -70,12 +73,15 @@ public class HelloController {
                     Stage currentStage = (Stage)loginMessageLabel.getScene().getWindow();
                     currentStage.close(); // close current scene
                     openKeyPage();
+
                 } else {
                     loginMessageLabel.setText("Invalid Login. Please try again");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            connectDB.close();
         }
     }
     protected void openKeyPage(){
@@ -90,4 +96,7 @@ public class HelloController {
             e.printStackTrace();
         }
     }
+
+
+
 }
