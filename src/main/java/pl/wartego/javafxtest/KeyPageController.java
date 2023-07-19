@@ -155,15 +155,15 @@ public class KeyPageController implements Initializable {
         }
     }
     @FXML
-    protected void countAllRows() throws SQLException {
-        ConnectionDBMethods.getCountRows();
+    protected int countAllRows() throws SQLException {
+       return ConnectionDBMethods.getCountRows();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             listAllRowsFromDB();
-            int countRows = ConnectionDBMethods.getCountRows();
+            int countRows = countAllRows();
             fieldCount.setText("Count: "+ countRows);
         } catch (SQLException e) {
             throw new RuntimeException(e);
