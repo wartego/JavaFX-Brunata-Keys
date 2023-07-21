@@ -46,15 +46,16 @@ public class KeyPageController implements Initializable {
     }
 
     @FXML
-    protected void buttonGenerateAction() throws SQLException, IOException {
+    protected void buttonGenerateAction() throws SQLException{
         SequanceChange sequanceChange = new SequanceChange();
         String keyAfterChanges = sequanceChange.changeSequence(textKeyBefore.getText());
         textKeyAfter.setText(keyAfterChanges);
         addToTableKeys();
+        countAllRows();
     }
 
     @FXML
-    protected void addToTableKeys() throws IOException, SQLException {
+    protected void addToTableKeys() throws SQLException {
         connectDB = ConnectionDBMethods.getDataBaseConnect();
         LocalDate date = LocalDate.now();
         String formatedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -156,15 +157,16 @@ public class KeyPageController implements Initializable {
     }
     @FXML
     protected int countAllRows() throws SQLException {
-       return ConnectionDBMethods.getCountRows();
+        int countRows = ConnectionDBMethods.getCountRows();
+        fieldCount.setText("Count: "+ countRows);
+        return countRows;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             listAllRowsFromDB();
-            int countRows = countAllRows();
-            fieldCount.setText("Count: "+ countRows);
+            countAllRows();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

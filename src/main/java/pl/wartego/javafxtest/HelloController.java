@@ -57,7 +57,7 @@ public class HelloController {
     protected void validateLogin() throws SQLException {
         connectDB = ConnectionDBMethods.getDataBaseConnect();
         //returning Hashed Password
-        String getPasswordByUser = String.format("SELECT password FROM User where login = '%s'", usernameTextField.getText());
+        String getPasswordByUser = String.format("SELECT password FROM user where login = '%s'", usernameTextField.getText());
         try {
             Statement statement = connectDB.createStatement();
             ResultSet queryResult = statement.executeQuery(getPasswordByUser);
