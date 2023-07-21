@@ -12,28 +12,23 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public class HelloController{
+public class HelloController {
+    @FXML
+    public static Connection connectDB;
     @FXML
     private Button cancelButton;
     @FXML
     private Label loginMessageLabel;
-
     @FXML
     private TextField usernameTextField;
-
     @FXML
     private PasswordField passwordTextField;
-
-    @FXML
-    public static Connection connectDB;
 
     @FXML
     protected void setCancelButtonOnClick(ActionEvent e) {
@@ -42,7 +37,7 @@ public class HelloController{
     }
 
     @FXML
-    protected void loginButtonOnClick(ActionEvent e) throws IOException, SQLException {
+    protected void loginButtonOnClick(ActionEvent e) throws SQLException {
 
         if (!usernameTextField.getText().isBlank() && !passwordTextField.getText().isBlank()) {
             loginMessageLabel.setText("You try to login");
@@ -61,16 +56,14 @@ public class HelloController{
     @FXML
     protected void validateLogin() throws SQLException {
         connectDB = ConnectionDBMethods.getDataBaseConnect();
-        String verifyLogin = String.format("SELECT count(1) FROM User where login = '%s' AND password = '%s'", usernameTextField.getText(), passwordTextField.getText());
-
+        //returning Hashed Password
+        String getPasswordByUser = String.format("SELECT password FROM User where login = '%s'", usernameTextField.getText());
         try {
             Statement statement = connectDB.createStatement();
-            ResultSet queryResult = statement.executeQuery(verifyLogin);
+            ResultSet queryResult = statement.executeQuery(getPasswordByUser);
             while (queryResult.next()) {
-                if (queryResult.getInt(1) == 1) {
-                    loginMessageLabel.setStyle("-fx-text-fill: #00ff1d");
-                    loginMessageLabel.setText("Welcome!");
-                    Stage currentStage = (Stage)loginMessageLabel.getScene().getWindow();
+                if (PasswordValidation.ifHashMatchToPassword(queryResult.getString(1), passwordTextField.getText())) {
+                    Stage currentStage = (Stage) loginMessageLabel.getScene().getWindow();
                     currentStage.close(); // close current scene
                     openKeyPage();
 
@@ -84,19 +77,19 @@ public class HelloController{
             connectDB.close();
         }
     }
-    protected void openKeyPage(){
+
+    protected void openKeyPage() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("KeyPage.fxml"));
-            Parent root = (Parent) fxmlLoader.load();
+            Parent root = fxmlLoader.load();
             Stage stageNew = new Stage();
             stageNew.setScene(new Scene(root));
             stageNew.initStyle(StageStyle.TRANSPARENT);
             stageNew.show();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
 
 }
