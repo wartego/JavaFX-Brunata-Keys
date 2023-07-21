@@ -59,7 +59,7 @@ public class HelloController{
     }
 
     @FXML
-    protected void validateLogin() throws IOException, SQLException {
+    protected void validateLogin() throws SQLException {
         connectDB = ConnectionDBMethods.getDataBaseConnect();
         String verifyLogin = String.format("SELECT count(1) FROM User where login = '%s' AND password = '%s'", usernameTextField.getText(), passwordTextField.getText());
 

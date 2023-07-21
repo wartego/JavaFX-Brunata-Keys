@@ -6,6 +6,7 @@ module pl.wartego.javafxtest {
     requires org.kordamp.ikonli.javafx;
     requires java.sql;
     requires mysql.connector.j;
+    requires spring.security.crypto;
 
     opens pl.wartego.javafxtest to javafx.fxml;
     exports pl.wartego.javafxtest;
