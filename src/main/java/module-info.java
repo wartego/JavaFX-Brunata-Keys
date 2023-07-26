@@ -1,6 +1,9 @@
 module pl.wartego.javafxtest {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
+    requires javafx.base;
+
 
     requires org.controlsfx.controls;
     requires org.kordamp.ikonli.javafx;

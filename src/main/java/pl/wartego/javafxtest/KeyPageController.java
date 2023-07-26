@@ -34,8 +34,9 @@ public class KeyPageController implements Initializable {
 
     @FXML
     private TextField fieldCount;
-
+    @FXML
     private ObservableList<ObservableList> data;
+    @FXML
     private ResultSet queryResult;
 
 
