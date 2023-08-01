@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 
 public class KeyPageController implements Initializable {
     public static Connection connectDB;
+    public String ipAddress;
     @FXML
     private Button buttonClose;
     @FXML
@@ -34,8 +35,9 @@ public class KeyPageController implements Initializable {
 
     @FXML
     private TextField fieldCount;
-
+    @FXML
     private ObservableList<ObservableList> data;
+    @FXML
     private ResultSet queryResult;
 
 
@@ -60,15 +62,16 @@ public class KeyPageController implements Initializable {
         LocalDate date = LocalDate.now();
         String formatedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        String addRowToTable = "INSERT INTO encryptionkeys (keybefore, keyafter, userProvide, inputDate) VALUES (?, ?,?,?);";
+        String addRowToTable = "INSERT INTO encryptionkeys (keybefore, keyafter, userProvide, inputDate, IPAddress) VALUES (?, ?,?,?,?);";
 
         try {
             PreparedStatement preparedStatement = connectDB.prepareStatement(addRowToTable);
 
             preparedStatement.setString(1, textKeyBefore.getText());
             preparedStatement.setString(2, textKeyAfter.getText());
-            preparedStatement.setString(3, "user");
+            preparedStatement.setString(3, HelloController.loginUser);
             preparedStatement.setString(4, formatedDate);
+            preparedStatement.setString(5, ipAddress);
             int queryResult = preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -167,9 +170,10 @@ public class KeyPageController implements Initializable {
         try {
             listAllRowsFromDB();
             countAllRows();
+            ipAddress = new NetworkIP().getIP();
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

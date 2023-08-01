@@ -6,11 +6,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.IOException;
-
 public class KeyPageApplication extends Application {
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("KeyPage.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 750, 550);
         stage.initStyle(StageStyle.TRANSPARENT);

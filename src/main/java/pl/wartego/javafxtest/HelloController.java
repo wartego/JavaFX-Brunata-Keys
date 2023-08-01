@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -21,6 +22,7 @@ import java.sql.Statement;
 public class HelloController {
     @FXML
     public static Connection connectDB;
+    public static String loginUser;
     @FXML
     private Button cancelButton;
     @FXML
@@ -37,7 +39,7 @@ public class HelloController {
     }
 
     @FXML
-    protected void loginButtonOnClick(ActionEvent e) throws SQLException {
+    protected void loginButtonOnClick() throws SQLException {
 
         if (!usernameTextField.getText().isBlank() && !passwordTextField.getText().isBlank()) {
             loginMessageLabel.setText("You try to login");
@@ -64,6 +66,7 @@ public class HelloController {
             while (queryResult.next()) {
                 if (PasswordValidation.ifHashMatchToPassword(queryResult.getString(1), passwordTextField.getText())) {
                     Stage currentStage = (Stage) loginMessageLabel.getScene().getWindow();
+                    loginUser = usernameTextField.getText();
                     currentStage.close(); // close current scene
                     openKeyPage();
 
@@ -78,6 +81,14 @@ public class HelloController {
         }
     }
 
+    @FXML
+
+    protected void keyEnterPressed(KeyEvent event) throws SQLException {
+        switch (event.getCode()) {
+            case ENTER -> loginButtonOnClick();
+        }
+    }
+
     protected void openKeyPage() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("KeyPage.fxml"));
@@ -86,6 +97,7 @@ public class HelloController {
             stageNew.setScene(new Scene(root));
             stageNew.initStyle(StageStyle.TRANSPARENT);
             stageNew.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
