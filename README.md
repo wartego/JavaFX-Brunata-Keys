@@ -34,3 +34,11 @@ Program for company use with using JavaFX
     }
 }
 
+
+#### to compile file to jar file it's neccassary in Maven:
+
+1. compile
+2. install
+
+##### then open jar file. 
+
