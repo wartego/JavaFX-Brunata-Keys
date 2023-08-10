@@ -3,6 +3,7 @@ package pl.wartego.javafxtest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,15 +14,20 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 
 
 public class HelloController {
-    @FXML
+
     public static Connection connectDB;
+    private Stage stage;
+    private Scene scene;
+    private ActionEvent eventAction;
     public static String loginUser;
     @FXML
     private Button cancelButton;
@@ -33,17 +39,17 @@ public class HelloController {
     private PasswordField passwordTextField;
 
     @FXML
-    protected void setCancelButtonOnClick(ActionEvent e) {
+    protected void setCancelButtonOnClick(ActionEvent event) {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    protected void loginButtonOnClick() throws SQLException {
+    protected void loginButtonOnClick(ActionEvent event) throws SQLException {
 
         if (!usernameTextField.getText().isBlank() && !passwordTextField.getText().isBlank()) {
             loginMessageLabel.setText("You try to login");
-            validateLogin(); // call Method
+            validateLogin(event); // call Method
         } else {
             loginMessageLabel.setText("Please input login and password first!");
             setUserAndPasswordFieldBlank();
@@ -56,8 +62,9 @@ public class HelloController {
     }
 
     @FXML
-    protected void validateLogin() throws SQLException {
+    protected void validateLogin(ActionEvent event) throws SQLException {
         connectDB = ConnectionDBMethods.getDataBaseConnect();
+        eventAction = event;
         //returning Hashed Password
         String getPasswordByUser = String.format("SELECT password FROM user where login = '%s'", usernameTextField.getText());
         try {
@@ -68,7 +75,7 @@ public class HelloController {
                     Stage currentStage = (Stage) loginMessageLabel.getScene().getWindow();
                     loginUser = usernameTextField.getText();
                     currentStage.close(); // close current scene
-                    openKeyPage();
+                    openKeyPage(event);
 
                 } else {
                     loginMessageLabel.setText("Invalid Login. Please try again");
@@ -81,26 +88,31 @@ public class HelloController {
         }
     }
 
-    @FXML
 
+    @FXML
     protected void keyEnterPressed(KeyEvent event) throws SQLException {
         switch (event.getCode()) {
-            case ENTER -> loginButtonOnClick();
+            case ENTER -> loginButtonOnClick(eventAction);
         }
     }
 
-    protected void openKeyPage() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("KeyPage.fxml"));
-            Parent root = fxmlLoader.load();
-            Stage stageNew = new Stage();
-            stageNew.setScene(new Scene(root));
-            stageNew.initStyle(StageStyle.TRANSPARENT);
-            stageNew.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    protected void openKeyPage(ActionEvent event) throws IOException {
+        SceneController.switchToSceneKeyPage(event);
+//        try {
+//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("KeyPage.fxml"));
+//            Parent root = fxmlLoader.load();
+//            Stage stageNew = new Stage();
+//            stageNew.setScene(new Scene(root));
+//            stageNew.initStyle(StageStyle.TRANSPARENT);
+//            stageNew.show();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+    }
+    @FXML
+    public void switchToSceneRegistry(ActionEvent event) throws IOException {
+        SceneController.switchToSceneRegistry(event);
     }
 
 
