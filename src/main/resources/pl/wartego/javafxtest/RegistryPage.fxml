@@ -59,22 +59,22 @@
          <children>
             <Label layoutX="51.0" layoutY="95.0" prefHeight="30.0" prefWidth="75.0" text="Login:">
                <font>
-                  <Font name="Ebrima" size="22.0" />
+                  <Font name="Ebrima" size="20.0" />
                </font>
             </Label>
             <Label layoutX="51.0" layoutY="143.0" text="Password: ">
                <font>
-                  <Font name="Ebrima" size="22.0" />
+                  <Font name="Ebrima" size="20.0" />
                </font>
             </Label>
             <Label layoutX="51.0" layoutY="185.0" text="First name:">
                <font>
-                  <Font name="Ebrima" size="22.0" />
+                  <Font name="Ebrima" size="20.0" />
                </font>
             </Label>
             <Label layoutX="51.0" layoutY="228.0" text="Last name: ">
                <font>
-                  <Font name="Ebrima" size="22.0" />
+                  <Font name="Ebrima" size="20.0" />
                </font>
             </Label>
             <TextField fx:id="newLogin" layoutX="176.0" layoutY="99.0" prefHeight="30.0" prefWidth="200.0" promptText="Please input your new login" />
